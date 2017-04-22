@@ -9,7 +9,7 @@ class Server
       ['200', {'Content-Type' => 'text/html'}, ['App has started']]
     end
 
-    Rack::Handler::WEBrick.run app
+    Rack::Handler::WEBrick.run app, {Host: '0.0.0.0'}
 
     # TODO create TCP and UDP echo servers and start them
   end
