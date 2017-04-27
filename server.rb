@@ -10,7 +10,7 @@ class Server
       ['200', {'Content-Type' => 'text/html'}, ["App has started. The time is #{Time.now.strftime("%I:%M:%S %p")}"]]
     end
 
-    Thread.new{UDPEchoServer.new(7210).run}
+    Thread.new{UDPEchoServer.new(3030).run}
 
     Rack::Handler::WEBrick.run app, {Host: '0.0.0.0', Daemonize: true}
 
@@ -29,9 +29,7 @@ class UDPEchoServer
   def run
     while true
       text, sender = @socket.recvfrom(16)
-      puts text
       @socket.send(text, 0, sender[3], sender[1])
-      sleep(1)
     end
   end
 end
