@@ -6,14 +6,16 @@ require 'rack'
 class Server
 
   def startup
+
     puts 'starting the server'
+
     app = Proc.new do |env|
       ['200', {'Content-Type' => 'text/html'}, ["App has started. The time is #{Time.now.strftime('%I:%M:%S %p')}"]]
     end
 
     # TODO create a UDP echo server and start it
 
-    TCPEchoServer.new(8012).start
+    TCPEcho.new(3030).start
 
     Rack::Handler::WEBrick.run app, {Host: '0.0.0.0', Daemonize: true}
 
@@ -22,7 +24,7 @@ class Server
 end
 
 
-class TCPEchoServer
+class TCPEcho
 
   @server
 
@@ -38,25 +40,17 @@ class TCPEchoServer
 
       Thread.new(connection) do |conn|
 
-        port, host = conn.peeraddr[1,2]
-
-        client = "#{host}:#{port}"
-
-        puts "#{client} is connected"
-
         begin
 
           loop do
 
-            line = conn.readline
-            conn.puts(line)
+            conn.write(conn.recv(1048))
 
           end
 
         rescue
 
           conn.close
-          puts "#{client} has disconnected."
 
         end
 
