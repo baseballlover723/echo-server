@@ -28,10 +28,8 @@ class TCPEcho
       Thread.new(connection) do |conn|
         begin
           loop do
-            conn.write(conn.recv(1048))
+            conn.write(conn.recv(1024))
           end
-        rescue
-          conn.close
         end
       end
     end
