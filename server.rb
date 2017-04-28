@@ -26,10 +26,8 @@ class TCPEcho
   def start
     while (connection = @server.accept)
       Thread.new(connection) do |conn|
-        begin
-          loop do
-            conn.write(conn.recv(1024))
-          end
+        loop do
+          conn.write(conn.recv(1024))
         end
       end
     end
