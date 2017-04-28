@@ -6,7 +6,6 @@ require 'rack'
 class Server
 
   def startup
-
     puts 'starting the server'
 
     app = Proc.new do |env|
@@ -14,52 +13,34 @@ class Server
     end
 
     # TODO create a UDP echo server and start it
-
-    TCPEcho.new(3030).start
+    Thread.new do
+      TCPEcho.new(3030).start
+    end
 
     Rack::Handler::WEBrick.run app, {Host: '0.0.0.0', Daemonize: true}
-
   end
-
 end
 
 
 class TCPEcho
 
-  @server
+  attr_accessor :server
 
   def initialize(port)
-
     @server = TCPServer.new('0.0.0.0', port)
-
   end
 
   def start
-
-    while (connection = @server.accept)
-
-      Thread.new(connection) do |conn|
-
-        begin
-
-          loop do
-
-            conn.write(conn.recv(1048))
-
-          end
-
-        rescue
-
-          conn.close
-
+    while (conn = @server.accept)
+      begin
+        loop do
+          conn.write(conn.recv(1048))
         end
-
+      rescue
+        conn.close
       end
-
     end
-
   end
-
 end
 
 Server.new.startup
