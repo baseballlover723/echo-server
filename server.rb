@@ -28,7 +28,7 @@ class UDPEchoServer
 
   def run
     while true
-      text, sender = @socket.recvfrom(16)
+      text, sender = @socket.recvfrom(524288000)
       @socket.send(text, 0, sender[3], sender[1])
     end
   end
