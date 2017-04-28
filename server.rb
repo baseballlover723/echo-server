@@ -4,10 +4,8 @@ require 'socket'
 require 'rack'
 
 class Server
-
   def startup
     puts 'starting the server'
-
     app = Proc.new do |env|
       ['200', {'Content-Type' => 'text/html'}, ["App has started. The time is #{Time.now.strftime('%I:%M:%S %p')}"]]
     end
